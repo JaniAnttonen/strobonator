@@ -3,7 +3,7 @@
 
 > Tries to drain your batteries as fast as it can while spazzing out. NOW WITH COLORS!
 
-Commands:
+## Commands
 
 `run` -> toggles the strobo on/off
 
