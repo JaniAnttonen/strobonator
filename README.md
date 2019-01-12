@@ -1,5 +1,5 @@
 # Strobonator
-Disobey 2019 badge app
+*Disobey 2019 badge app*
 
 > Tries to drain your batteries as fast as it can while spazzing out. NOW WITH COLORS!
 
