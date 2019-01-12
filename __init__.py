@@ -1,6 +1,7 @@
 import badge
 import ugfx
 import time
+import random
 import appglue
 import _thread
 
@@ -10,6 +11,8 @@ class Strobonator:
         self.strobonator_on = True
         self.delay = 50.0
         self.color = [255, 255, 255]
+        self.mode_num = 2
+        self.num_leds = 5
         _thread.start_new_thread(self.run, ())
 
     def run(self):
@@ -21,29 +24,38 @@ class Strobonator:
                 latch = False
             else:
                 badge.backlight(255)
-                badge.led(6, self.color[0], self.color[1], self.color[2])
+                if self.mode_num == 4:
+                    for i in range(0, self.num_leds):
+                        badge.led(i, self.get_color())
+                else:
+                    badge.led(6, self.color[0], self.color[1], self.color[2])
                 latch = True
             time.sleep(self.delay / 1000)
 
+    def get_color(self):
+        returnable = [0, 0, 0]
+        rgb = random.randint(0, 2)
+        returnable[rgb] = 255
+        return returnable
+
     def change_color(self, forward):
+        rgb = [0, 0, 0]
         if forward:
-            if self.color == [255, 255, 255]:
-                self.color = [255, 0, 0]
-            elif self.color == [255, 0, 0]:
-                self.color = [0, 255, 0]
-            elif self.color == [0, 255, 0]:
-                self.color = [0, 0, 255]
+            if self.mode_num < 4:
+                self.mode_num += 1
             else:
-                self.color = [255, 255, 255]
+                self.mode_num = 0
         else:
-            if self.color == [255, 255, 255]:
-                self.color = [0, 0, 255]
-            elif self.color == [0, 0, 255]:
-                self.color = [0, 255, 0]
-            elif self.color == [0, 255, 0]:
-                self.color = [255, 0, 0]
+            if self.mode_num > 0:
+                self.mode_num -= 1
             else:
-                self.color = [255, 255, 255]
+                self.mode_num = 4
+
+        if self.mode_num < 3:
+            rgb[self.mode_num] = 255
+            self.color = rgb
+        else:
+            self.color = [255, 255, 255]
 
     def press_start(self, button_pressed):
         if button_pressed:
